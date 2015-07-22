@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+var args = require('yargs')
+  , argv      = args.argv;
+
+process.stdin.setEncoding('utf8');
+
+var VersionBumper = require('..');
+
+process.stdin.setEncoding('utf8');
+if(!argv._[0]){
+  argv = args
+    .usage("\nBump all the ".yellow+'.versions'.red+' in all your '.yellow+'.jsons'.cyan)
+    .example('$0', 'bump all version numbers in all json files in your current directory, make a commit, a tag, and ask if you want to go public with it')
+    //.example('$0 changelog', 'view all tags that have been made')
+    //.example('$0 ch', 'shortcut to view all tags that have been made')
+    //.example('$0 ch 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
+    .help('h')
+    .alias('h', 'help')
+    .argv
+
+  VersionBumper();
+}else{
+  switch(argv._[0]){
+    case ch:
+    case changelog:
+  }
+}
+
+
+/*
+changelog info:
+
+git -l -n9 [search]
+
+e.g. git -l -n9 0.*
+
+search should be like:
+
+devup changelog 44
+
+should find 0.44.* if no 44 exists
+44.* if it does exist
+*/
