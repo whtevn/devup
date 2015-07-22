@@ -70,7 +70,10 @@ function changeVersion(item){
       if(contents.version){
         new_version_number = bumpVersion(contents.version);
         contents.version = new_version_number
-        return fs.write(item, JSON.stringify(contents, null, "\t"));
+        return fs.write(item, JSON.stringify(contents, null, "\t"))
+          .then(function(){
+            return contents.version;
+          })
       }
     })
     .then(function(){
