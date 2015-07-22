@@ -92,7 +92,7 @@ function createLocalTag(info){
   var message = info[1];
   return exec('git tag -a '+version+' -m "'+message+'"')
     .then(function(){
-      console.log("\tcongratulations, tag '".yellow+version.red+"' has been created with message\n\t".yellow+message.green);
+      console.log("\tcongratulations, tag '".yellow+version.red+"' has been created with message\n\t\t".yellow+message.green);
       return {
         version: version
       , message: message
