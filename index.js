@@ -49,6 +49,8 @@ function pushOrDont(doit){
   if(doit){
     return exec('git push')
       .then(function(){
+        console.log("information has been successfully pushed".green)
+        console.log("\tpushing tags...".yellow)
         exec('git push --tags')
       })
       .then(function(){
