@@ -45,6 +45,7 @@ function commitLocalChanges(version){
 }
 
 function pushOrDont(doit){
+  console.log(doit);
   if(doit){
     return exec('git commit -am "bumping version numbers"')
       .then(function(){
@@ -62,13 +63,13 @@ function requestPermissionToPush(){
   prompt.start()
   prompt.get([{properties: {push: {
     message: msg.cyan,
-    validator: /y[es]*|n[o]?/,
+    validator: /y[es]*|n[o]?/i,
     warning: 'Must respond yes or no',
     default: 'no'
   }}}], function(err, result){
     if(err) deferred.reject(err);
 
-    deferred.resolve(result.push.match(/y[es]/));
+    deferred.resolve(result.push.match(/y[es]/i));
   })
 
   return deferred.promise
