@@ -70,7 +70,7 @@ function requestPermissionToPush(){
     if(err) deferred.reject(err);
 
     console.log(result.push);
-    deferred.resolve(result.push.match(/y[es]/i));
+    deferred.resolve(result.push.match(/y[es]?/i));
   })
 
   return deferred.promise
