@@ -6,9 +6,15 @@ var path = require('path');
 var exec = require('exec-as-promised')(console);
 var prompt = require('prompt');
 
-fs.list('.')
+version_found = fs.list('.')
   .then(validateUpdate)
   .then(updateVersions)
+  .catch(function(err){
+    console.log(err.stack);
+  });
+
+
+version_found
   .then(commitLocalChanges)
   .then(requestTagMessage)
   .then(createLocalTag)
@@ -16,7 +22,7 @@ fs.list('.')
     console.log(err.stack);
   });
 
-function commitLocalChanges(){
+function commitLocalChanges(version){
   return exec('git commit -am "bumping version numbers"');
 }
 
@@ -34,7 +40,7 @@ function requestTagMessage(){
 }
 
 function createLocalTag(message){
-  return validateList()
+  return version_found
     .then(function(version){
       return exec('git tag -a '+version+' -m '+message);
     })
