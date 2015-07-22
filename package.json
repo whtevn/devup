@@ -1,0 +1,19 @@
+{
+	"name": "devup",
+	"version": "0.0.0",
+	"description": "git utility to version and tag",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "evan <evan.short@gmail.com>",
+	"license": "MIT",
+	"dependencies": {
+		"confoo": "0.0.7",
+		"fs-extra": "^0.22.1",
+		"nodegit": "^0.4.1",
+		"promisify-node": "^0.1.5",
+		"q": "^1.4.1",
+		"q-io": "^1.13.1"
+	}
+}
