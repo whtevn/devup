@@ -6,8 +6,11 @@ var path = require('path');
 var exec = require('exec-as-promised')(console);
 var prompt = require('prompt');
 
-var version_found = fs.list('.')
+var version_found = getLocalFileList()
   .then(validateUpdate)
+
+version_found
+  .then(getLocalFileList)
   .then(updateVersions)
   .catch(function(err){
     console.log(err.stack);
@@ -22,8 +25,15 @@ version_found
     console.log(err.stack);
   });
 
+function getLocalFileList(){
+  return fs.list('.');
+}
+
 function commitLocalChanges(version){
-  return exec('git commit -am "bumping version numbers"');
+  return exec('git commit -am "bumping version numbers"')
+    .then(function(){
+      return version;
+    });
 }
 
 function requestTagMessage(){
@@ -44,10 +54,6 @@ function createLocalTag(message){
     .then(function(version){
       return exec('git tag -a '+version+' -m "'+message+'"');
     })
-}
-
-function validateVersionConsistency(list){
-  return validateUpdate(list)
 }
 
 function updateVersions(list, entry){
@@ -94,7 +100,7 @@ function changeVersion(item){
 function validateUpdate(list, version, entry){
   entry = (entry || 0);
   var item = list[entry];
-  if(!item) return list;
+  if(!item) return version;
 
   return checkVersionConsistency(item, version)
     .then(function(version){
