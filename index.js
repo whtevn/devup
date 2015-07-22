@@ -6,7 +6,7 @@ var path = require('path');
 var exec = require('exec-as-promised')(console);
 var prompt = require('prompt');
 prompt.message = "";
-prompt.delimiter = " ";
+prompt.delimiter = "";
 
 var file_list = fs.list('.');
 
@@ -53,6 +53,7 @@ function requestTagMessage(version){
 }
 
 function createLocalTag(info){
+  console.log(info);
   var message = info[0];
   var version = info[1];
   return exec('git tag -a '+version+' -m "'+message+'"');
