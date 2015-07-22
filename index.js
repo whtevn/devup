@@ -45,13 +45,12 @@ function commitLocalChanges(version){
 }
 
 function pushOrDont(doit){
-  console.log(doit);
   if(doit){
     return exec('git push')
       .then(function(){
         console.log("information has been successfully pushed".green)
         console.log("\tpushing tags...".yellow)
-        exec('git push --tags')
+        return exec('git push --tags')
       })
       .then(function(){
         console.log("tag and information have been successfully pushed".green)
@@ -74,7 +73,6 @@ function requestPermissionToPush(){
   }}}], function(err, result){
     if(err) deferred.reject(err);
 
-    console.log(result.push);
     deferred.resolve(result.push.match(/y[es]?/i));
   })
 
