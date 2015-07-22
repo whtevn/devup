@@ -42,11 +42,11 @@ function commitLocalChanges(version){
     });
 }
 
-function requestTagMessage(){
+function requestTagMessage(version){
   var deferred = Q.defer();
 
   prompt.start()
-  prompt.get([{properties: {tag: {message: 'what was the change?'.green}}}], function(err, result){
+  prompt.get([{properties: {tag: {message: 'what was the change in version '+version+'?'.green}}}], function(err, result){
     if(err) deferred.reject(err);
 
     deferred.resolve(result.tag);
