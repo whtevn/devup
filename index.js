@@ -58,8 +58,8 @@ function requestTagMessage(version){
 
 function createLocalTag(info){
   console.log(info);
-  var message = info[0];
-  var version = info[1];
+  var version = info[0];
+  var message = info[1];
   return exec('git tag -a '+version+' -m "'+message+'"');
 }
 
