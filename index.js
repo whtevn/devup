@@ -28,9 +28,10 @@ function requestTagMessage(){
   var deferred = Q.defer();
 
   prompt.start()
-  prompt.get([{properties: {tag: {message: 'what was the change?'}}}], function(result){
-    console.log(result);
-    //deferred.resolve(result.tag);
+  prompt.get([{properties: {tag: {message: 'what was the change?'}}}], function(err, result){
+    if(err) deferred.reject(err);
+
+    deferred.resolve(result.tag);
   })
 
   return deferred.promise
