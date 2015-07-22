@@ -46,14 +46,15 @@ function commitLocalChanges(version){
 
 function pushOrDont(doit){
   if(doit){
+    console.log("pushing changes...".yellow)
     return exec('git push')
       .then(function(){
-        console.log("information has been successfully pushed".green)
-        console.log("\tpushing tags...".yellow)
+        console.log("\tinformation has been successfully pushed".green)
+        console.log("pushing tags...".yellow)
         return exec('git push --tags')
       })
       .then(function(){
-        console.log("tag and information have been successfully pushed".green)
+        console.log("\ttags have been successfully pushed".green)
       })
   }else{
     console.log("\tall changes remain locally, but have not been made public".yellow);
