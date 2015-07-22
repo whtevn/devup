@@ -14,7 +14,7 @@ var tag_message_made = file_list
   .then(validateUpdate)
   .then(requestTagMessage)
 
-version_set = tag_message_made
+var version_set = tag_message_made
   .then(function(){
     return file_list
   })
