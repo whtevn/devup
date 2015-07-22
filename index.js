@@ -112,7 +112,7 @@ function updateVersions(list, entry){
     })
 }
 
-function readJSONFile(item){
+function read_JSON_File(item){
   var deferred = Q.defer();
   if(item.match(/\.json$/)){
     fs.read(item)
@@ -133,7 +133,7 @@ function changeVersion(item){
       if(is_file) return read_JSON_File(item)
     })
     .then(function(contents){
-      if(contents.version){
+      if(contents && contents.version){
         new_version_number = bumpVersion(contents.version);
         contents.version = new_version_number
         return fs.write(item, JSON.stringify(contents, null, "\t"))
