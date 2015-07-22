@@ -3,7 +3,7 @@ var fs = require('q-io/fs');
 var confoo = require('confoo');
 var Q = require('q');
 var path = require('path');
-var exec = require('exec-as-promised')(console);
+var exec = require('exec-as-promised')();
 var prompt = require('prompt');
 prompt.message = "";
 prompt.delimiter = "";
@@ -35,7 +35,6 @@ function getLocalFileList(){
 }
 
 function commitLocalChanges(version){
-  console.log("##################", version);
   return exec('git commit -am "bumping version numbers"')
     .then(function(){
       return version;
@@ -57,7 +56,6 @@ function requestTagMessage(version){
 }
 
 function createLocalTag(info){
-  console.log(info);
   var version = info[0];
   var message = info[1];
   return exec('git tag -a '+version+' -m "'+message+'"');
