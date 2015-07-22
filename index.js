@@ -8,24 +8,21 @@ var prompt = require('prompt');
 prompt.message = "";
 prompt.delimiter = " ";
 
+var file_list = fs.list('.');
 
-var version_found = getLocalFileList()
+var tag_message_made = file_list
   .then(validateUpdate)
-
-var changes_made = version_found
-  .then(getLocalFileList)
-  .then(updateVersions)
-  .catch(function(err){
-    console.log(err.stack);
-  });
-
-
-Q.all([version_found, changes_made])
-  .then(function(result){
-    return result[0];
-  })
-  .then(commitLocalChanges)
   .then(requestTagMessage)
+
+tag_message_made
+  .then(function(){
+    return file_list
+  })
+  .then(updateVersions)
+  .then(commitLocalChanges)
+  .then(function(){
+    return tag_message_made
+  })
   .then(createLocalTag)
   .catch(function(err){
     console.log(err.stack);
@@ -45,8 +42,9 @@ function commitLocalChanges(version){
 function requestTagMessage(version){
   var deferred = Q.defer();
 
+  var msg = 'what was the change in version '+version+'?'
   prompt.start()
-  prompt.get([{properties: {tag: {message: 'what was the change in version '+version+'?'.green}}}], function(err, result){
+  prompt.get([{properties: {tag: {message: msg.green}}}], function(err, result){
     if(err) deferred.reject(err);
 
     deferred.resolve(result.tag);
