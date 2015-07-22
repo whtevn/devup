@@ -5,7 +5,7 @@ var args = require('yargs')
 
 process.stdin.setEncoding('utf8');
 
-var VersionBumper = require('..');
+var VersionBumper = require('../lib/bumper');
 
 process.stdin.setEncoding('utf8');
 if(!argv._[0]){
