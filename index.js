@@ -32,7 +32,7 @@ function getLocalFileList(){
 }
 
 function commitLocalChanges(version){
-  console.log(version);
+  console.log("##################", version);
   return exec('git commit -am "bumping version numbers"')
     .then(function(){
       return version;
