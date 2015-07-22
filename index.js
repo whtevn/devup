@@ -6,7 +6,7 @@ var path = require('path');
 var exec = require('exec-as-promised')(console);
 var prompt = require('prompt');
 
-version_found = fs.list('.')
+var version_found = fs.list('.')
   .then(validateUpdate)
   .then(updateVersions)
   .catch(function(err){
@@ -42,7 +42,7 @@ function requestTagMessage(){
 function createLocalTag(message){
   return version_found
     .then(function(version){
-      return exec('git tag -a '+version+' -m '+message);
+      return exec('git tag -a '+version+' -m "'+message+'"');
     })
 }
 
