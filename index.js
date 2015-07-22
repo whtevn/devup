@@ -10,18 +10,21 @@ prompt.delimiter = "";
 
 var file_list = fs.list('.');
 
-var tag_message_made = file_list
-  .then(validateUpdate)
-  .then(requestTagMessage)
+var version_found = file_list.then(validateUpdate)
 
-var version_set = tag_message_made
+var tag_message_made = version_found.then(requestTagMessage)
+
+var version_info = Q.all([version_found, tag_message_made])
+
+version_info
   .then(function(){
     return file_list
   })
   .then(updateVersions)
   .then(commitLocalChanges)
-
-Q.all([tag_message_made, version_set])
+  .then(function(){
+    return version_info
+  })
   .then(createLocalTag)
   .catch(function(err){
     console.log(err.stack);
