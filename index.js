@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 var fs = require('q-io/fs');
 var confoo = require('confoo');
 var Q = require('q');
@@ -16,22 +15,24 @@ var tag_message_made = version_found.then(requestTagMessage)
 
 var version_info = Q.all([version_found, tag_message_made])
 
-version_info
-  .then(function(){
-    return file_list
-  })
-  .then(updateVersions)
-  .then(commitLocalChanges)
-  .then(function(){
-    return version_info
-  })
-  .then(createLocalTag)
-  .then(requestPermissionToPush)
-  .then(pushOrDont)
-  .catch(function(err){
-    console.log("whoops!");
-    console.log(err.stack || err);
-  });
+module.exports = function(){
+  version_info
+    .then(function(){
+      return file_list
+    })
+    .then(updateVersions)
+    .then(commitLocalChanges)
+    .then(function(){
+      return version_info
+    })
+    .then(createLocalTag)
+    .then(requestPermissionToPush)
+    .then(pushOrDont)
+    .catch(function(err){
+      console.log("whoops!");
+      console.log(err.stack || err);
+    });
+}
 
 function getLocalFileList(){
   return fs.list('.');
