@@ -50,7 +50,7 @@ function pushOrDont(doit){
         console.log("items successfully pushed".green)
       })
   }else{
-    console.log('all changes remain locally, but have not been made public'.yellow);
+    console.log("\tall changes remain locally, but have not been made public".yellow);
   }
 }
 
