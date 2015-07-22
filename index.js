@@ -14,15 +14,14 @@ var tag_message_made = file_list
   .then(validateUpdate)
   .then(requestTagMessage)
 
-tag_message_made
+version_set = tag_message_made
   .then(function(){
     return file_list
   })
   .then(updateVersions)
   .then(commitLocalChanges)
-  .then(function(){
-    return tag_message_made
-  })
+
+Q.all([tag_message_made, version_set] )
   .then(createLocalTag)
   .catch(function(err){
     console.log(err.stack);
@@ -53,11 +52,10 @@ function requestTagMessage(version){
   return deferred.promise
 }
 
-function createLocalTag(message){
-  return version_found
-    .then(function(version){
-      return exec('git tag -a '+version+' -m "'+message+'"');
-    })
+function createLocalTag(info){
+  var message = info[0];
+  var version = info[1];
+  return exec('git tag -a '+version+' -m "'+message+'"');
 }
 
 function updateVersions(list, entry){
