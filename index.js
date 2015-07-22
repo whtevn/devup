@@ -4,29 +4,42 @@ var confoo = require('confoo');
 var Q = require('q');
 var path = require('path');
 var exec = require('exec-as-promised')(console);
+var prompt = require('prompt');
 
-fs.list('.')
-  .then(validateVersionConsistency)
+function validateList(){
+  return fs.list('.')
+    .then(validateVersionConsistency)
+}
+
+validateList()
   .then(updateVersions)
   .then(commitLocalChanges)
-  //.then(requestTagMessage)
-  //.then(createLocalTag)
+  .then(requestTagMessage)
+  .then(createLocalTag)
   .catch(function(err){
     console.log(err.stack);
   });
-
-function openRepo(){
-  return 
-}
 
 function commitLocalChanges(){
   return exec('git commit -am "bumping version numbers"');
 }
 
 function requestTagMessage(){
+  var deferred = Q.defer();
+
+  prompt.start()
+  prompt.get('what was the change?', function(){
+    deferred.resolve(result);
+  })
+
+  return deferred.promise
 }
 
 function createLocalTag(message){
+  return validateList()
+    .then(function(version){
+      return exec('git tag -a '+version+' -m '+message);
+    })
 }
 
 function validateVersionConsistency(list){
