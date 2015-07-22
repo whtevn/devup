@@ -80,9 +80,11 @@ function requestTagMessage(version){
   var msg = 'what was the change in version '+version+'?'
   prompt.start()
   prompt.get([{properties: {tag: {message: msg.cyan}}}], function(err, result){
-    if(err) deferred.reject(err);
-
-    deferred.resolve(result.tag);
+    if(!err && result && result.tag){
+      deferred.resolve(result.tag);
+    }else{
+      deferred.reject(err || "Blank tags are not allowed. No changes were made");
+    }
   })
 
   return deferred.promise
@@ -110,18 +112,25 @@ function updateVersions(list, entry){
     })
 }
 
+function readJSONFile(item){
+  var deferred = Q.defer();
+  if(item.match(/\.json$/)){
+    fs.read(item)
+      .then(function(contents){
+        deferred.resolve(JSON.parse(contents));
+      })
+  }else{
+    deferred.resolve({});
+  }
+  
+  return deferred.promise
+}
+
 function changeVersion(item){
   var deferred = Q.defer();
   fs.isFile(item)
     .then(function(is_file){
-      if(is_file && item.match(/\.json$/)){
-        return fs.read(item)
-          .then(function(contents){
-            return JSON.parse(contents);
-          })
-      }else{
-        return {}
-      }
+      if(is_file) return read_JSON_File(item)
     })
     .then(function(contents){
       if(contents.version){
