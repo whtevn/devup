@@ -4,11 +4,14 @@
 	"description": "git utility to version and tag",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"bin": {
 		"devup": "./bin/devup"
 	},
+  "bugs": {
+    "url" : "https://github.com/whtevn/devup/issues"
+  , "email" : "project@hostname.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/whtevn/devup.git"
@@ -16,7 +19,6 @@
 	"author": "evan <evan.short@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
-		"confoo": "0.0.7",
 		"exec-as-promised": "^1.1.0",
 		"prompt": "^0.2.14",
 		"q": "^1.4.1",
