@@ -29,7 +29,7 @@ function requestTagMessage(){
 
   prompt.start()
   prompt.get([{properties: {tag: {message: 'what was the change?'}}}], function(result){
-    deferred.resolve(result);
+    deferred.resolve(result.tag);
   })
 
   return deferred.promise
