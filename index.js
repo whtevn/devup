@@ -26,6 +26,8 @@ version_info
     return version_info
   })
   .then(createLocalTag)
+  .then(requestPermissionToPush)
+  .then(pushOrDont)
   .catch(function(err){
     console.log(err.stack);
   });
@@ -41,12 +43,42 @@ function commitLocalChanges(version){
     });
 }
 
+function pushOrDont(doit){
+  if(doit){
+    return exec('git commit -am "bumping version numbers"')
+      .then(function(){
+        console.log("items successfully pushed".green)
+      })
+  }else{
+    console.log('all changes remain locally, but have not been made public'.yellow);
+  }
+}
+
+function requestPermissionToPush(){
+  var deferred = Q.defer();
+
+  var msg = 'would you like to push to origin?'
+  prompt.start()
+  prompt.get([{properties: {push: {
+    message: msg.cyan,
+    validator: /y[es]*|n[o]?/,
+    warning: 'Must respond yes or no',
+    default: 'no'
+  }}}], function(err, result){
+    if(err) deferred.reject(err);
+
+    deferred.resolve(result.push.match(/y[es]/));
+  })
+
+  return deferred.promise
+}
+
 function requestTagMessage(version){
   var deferred = Q.defer();
 
   var msg = 'what was the change in version '+version+'?'
   prompt.start()
-  prompt.get([{properties: {tag: {message: msg.green}}}], function(err, result){
+  prompt.get([{properties: {tag: {message: msg.cyan}}}], function(err, result){
     if(err) deferred.reject(err);
 
     deferred.resolve(result.tag);
@@ -58,7 +90,14 @@ function requestTagMessage(version){
 function createLocalTag(info){
   var version = info[0];
   var message = info[1];
-  return exec('git tag -a '+version+' -m "'+message+'"');
+  return exec('git tag -a '+version+' -m "'+message+'"')
+    .then(function(){
+      console.log("congratulations, tag '"+version+"' has been created with message\n"+message);
+      return {
+        version: version
+      , message: message
+      }
+    });
 }
 
 function updateVersions(list, entry){
