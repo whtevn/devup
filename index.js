@@ -64,7 +64,7 @@ function pushOrDont(doit){
 function requestPermissionToPush(){
   var deferred = Q.defer();
 
-  var msg = 'would you like to push to origin?'
+  var msg = "\nwould you like to push to origin?"
   prompt.start()
   prompt.get([{properties: {push: {
     message: msg.cyan,
