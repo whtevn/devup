@@ -21,7 +21,7 @@ var version_set = tag_message_made
   .then(updateVersions)
   .then(commitLocalChanges)
 
-Q.all([tag_message_made, version_set] )
+Q.all([tag_message_made, version_set])
   .then(createLocalTag)
   .catch(function(err){
     console.log(err.stack);
