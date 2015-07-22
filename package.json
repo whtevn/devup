@@ -9,6 +9,10 @@
 	"bin": {
 		"devup": "./bin/devup"
 	},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whtevn/devup.git"
+  },
 	"author": "evan <evan.short@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
