@@ -47,9 +47,12 @@ function commitLocalChanges(version){
 function pushOrDont(doit){
   console.log(doit);
   if(doit){
-    return exec('git commit -am "bumping version numbers"')
+    return exec('git push')
       .then(function(){
-        console.log("items successfully pushed".green)
+        exec('git push --tags')
+      })
+      .then(function(){
+        console.log("tag and information have been successfully pushed".green)
       })
   }else{
     console.log("\tall changes remain locally, but have not been made public".yellow);
