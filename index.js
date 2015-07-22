@@ -9,7 +9,7 @@ var prompt = require('prompt');
 var version_found = getLocalFileList()
   .then(validateUpdate)
 
-version_found
+var changes_made = version_found
   .then(getLocalFileList)
   .then(updateVersions)
   .catch(function(err){
@@ -17,7 +17,10 @@ version_found
   });
 
 
-version_found
+Q.all([version_found, changes_made])
+  .then(function(result){
+    return result[0];
+  })
   .then(commitLocalChanges)
   .then(requestTagMessage)
   .then(createLocalTag)
