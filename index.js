@@ -44,9 +44,6 @@ function createLocalTag(message){
 
 function validateVersionConsistency(list){
   return validateUpdate(list)
-    .then(function(list){
-      return list;
-    })
 }
 
 function updateVersions(list, entry){
