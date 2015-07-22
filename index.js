@@ -29,7 +29,8 @@ version_info
   .then(requestPermissionToPush)
   .then(pushOrDont)
   .catch(function(err){
-    console.log(err.stack);
+    console.log("whoops!");
+    console.log(err.stack || err);
   });
 
 function getLocalFileList(){
