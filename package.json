@@ -1,21 +1,19 @@
 {
 	"name": "devup",
-	"version": "0.0.12",
+	"version": "0.0.13",
 	"description": "git utility to version and tag",
 	"main": "index.js",
-	"scripts": {
-	},
+	"scripts": {},
 	"bin": {
 		"devup": "./bin/devup"
 	},
-  "bugs": {
-    "url" : "https://github.com/whtevn/devup/issues"
-  , "email" : "project@hostname.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/whtevn/devup.git"
-  },
+	"bugs": {
+		"url": "https://github.com/whtevn/devup/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/whtevn/devup.git"
+	},
 	"author": "evan <evan.short@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
