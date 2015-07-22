@@ -6,14 +6,8 @@ var path = require('path');
 var exec = require('exec-as-promised')(console);
 var prompt = require('prompt');
 
-function getList(){
-  return fs.list('.')
-}
-
-var updateValidation = getList()
+fs.list('.')
   .then(validateUpdate)
-
-updateValidation
   .then(updateVersions)
   .then(commitLocalChanges)
   .then(requestTagMessage)
@@ -40,10 +34,14 @@ function requestTagMessage(){
 }
 
 function createLocalTag(message){
-  return updateValidation
+  return validateList()
     .then(function(version){
       return exec('git tag -a '+version+' -m '+message);
     })
+}
+
+function validateVersionConsistency(list){
+  return validateUpdate(list)
 }
 
 function updateVersions(list, entry){
