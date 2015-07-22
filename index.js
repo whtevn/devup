@@ -5,6 +5,9 @@ var Q = require('q');
 var path = require('path');
 var exec = require('exec-as-promised')(console);
 var prompt = require('prompt');
+prompt.message = "";
+prompt.delimiter = " ";
+
 
 var version_found = getLocalFileList()
   .then(validateUpdate)
@@ -43,7 +46,7 @@ function requestTagMessage(){
   var deferred = Q.defer();
 
   prompt.start()
-  prompt.get([{properties: {tag: {message: 'what was the change?'}}}], function(err, result){
+  prompt.get([{properties: {tag: {message: 'what was the change?'.green}}}], function(err, result){
     if(err) deferred.reject(err);
 
     deferred.resolve(result.tag);
