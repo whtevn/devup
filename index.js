@@ -69,6 +69,7 @@ function requestPermissionToPush(){
   }}}], function(err, result){
     if(err) deferred.reject(err);
 
+    console.log(result.push);
     deferred.resolve(result.push.match(/y[es]/i));
   })
 
