@@ -2,11 +2,8 @@
 var fs = require('q-io/fs');
 var confoo = require('confoo');
 var Q = require('q');
-var Git = require('nodegit');
-var promisify = require("promisify-node");
-var fse = promisify(require("fs-extra"));
-
-fse.ensureDir = promisify(fse.ensureDir);
+var path = require('path');
+var exec = require('exec-as-promised')(console);
 
 fs.list('.')
   .then(validateVersionConsistency)
@@ -15,17 +12,15 @@ fs.list('.')
   //.then(requestTagMessage)
   //.then(createLocalTag)
   .catch(function(err){
-    console.log(err);
+    console.log(err.stack);
   });
 
 function openRepo(){
-  return nodegit.Repository.open(path.resolve(__dirname, "../.git"))
+  return 
 }
 
 function commitLocalChanges(){
-  return openRepo().then(function(repoResult){
-    return repo.createCommit("HEAD");
-  })
+  return exec('git commit -am "bumping version numbers"');
 }
 
 function requestTagMessage(){
