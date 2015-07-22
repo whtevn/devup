@@ -10,8 +10,10 @@ function getList(){
   return fs.list('.')
 }
 
-getList()
+var updateValidation = getList()
   .then(validateUpdate)
+
+updateValidation
   .then(updateVersions)
   .then(commitLocalChanges)
   .then(requestTagMessage)
@@ -38,7 +40,7 @@ function requestTagMessage(){
 }
 
 function createLocalTag(message){
-  return validateList()
+  return updateValidation
     .then(function(version){
       return exec('git tag -a '+version+' -m '+message);
     })
