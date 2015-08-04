@@ -15,11 +15,13 @@ if(!argv._[0]){
     //.example('$0 changelog', 'view all tags that have been made')
     //.example('$0 ch', 'shortcut to view all tags that have been made')
     //.example('$0 ch 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
+    .alias('t', 'type')
+    .default('t', 'patch')
     .help('h')
     .alias('h', 'help')
     .argv
 
-  VersionBumper();
+  VersionBumper(argv.t);
 }else{
   switch(argv._[0]){
     case ch:

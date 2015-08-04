@@ -16,3 +16,9 @@ must be run in the top level of your project (or with all of your versioned .jso
 Options:
 
     -h, --help  Show help                                                [boolean]
+
+
+todo: 
+  - escape messages so that special characters can be used
+  - catch things after the version numbers have been updated so that they can be rolled back if the deal fails
+  - error out if no files with version numbers are found on validation
