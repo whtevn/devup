@@ -1,6 +1,6 @@
 {
 	"name": "devup",
-	"version": "0.1.13",
+	"version": "0.1.0",
 	"description": "git utility to version and tag",
 	"main": "index.js",
 	"scripts": {},
