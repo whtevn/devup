@@ -6,15 +6,13 @@ var args = require('yargs')
 process.stdin.setEncoding('utf8');
 
 var VersionBumper = require('../lib/bumper');
+var ChangelogPrinter = require('../lib/changelogger');
 
 process.stdin.setEncoding('utf8');
 if(!argv._[0]){
   argv = args
     .usage("\nBump all the ".yellow+'.versions'.red+' in all your '.yellow+'.jsons'.cyan)
     .example('$0', 'bump all version numbers in all json files in your current directory, make a commit, a tag, and ask if you want to go public with it')
-    //.example('$0 changelog', 'view all tags that have been made')
-    //.example('$0 ch', 'shortcut to view all tags that have been made')
-    //.example('$0 ch 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
     .alias('t', 'type')
     .default('t', 'patch')
     .help('h')
@@ -24,8 +22,23 @@ if(!argv._[0]){
   VersionBumper(argv.t);
 }else{
   switch(argv._[0]){
-    case ch:
-    case changelog:
+    case "ch":
+    case "changelog":
+      argv = args
+        .usage("\nBump all the ".yellow+'.versions'.red+' in all your '.yellow+'.jsons'.cyan)
+        .example('$0 changelog', 'view all tags that have been made')
+        .example('$0 ch', 'shortcut to view all tags that have been made')
+        .example('$0 ch 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
+        .example('$0 ch -v 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
+        .example('$0 ch --version 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
+        .help('h')
+        .alias('h', 'help')
+        .example('$0 ch -v 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
+        .argv
+    ChangelogPrinter(argv._[1]||argv.v)
+      .then(function(result){
+        console.log(result);
+      });
   }
 }
 
@@ -33,7 +46,7 @@ if(!argv._[0]){
 /*
 changelog info:
 
-git -l -n9 [search]
+git tag -l -n9 [search]
 
 e.g. git -l -n9 0.*
 
