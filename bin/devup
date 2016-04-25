@@ -25,9 +25,12 @@ if(!argv._[0]){
     case "ch":
     case "changelog":
       argv = args
+        .alias("o", "output")
+        .default("o", "json")
         .usage("\nBump all the ".yellow+'.versions'.red+' in all your '.yellow+'.jsons'.cyan)
         .example('$0 changelog', 'view all tags that have been made')
         .example('$0 ch', 'shortcut to view all tags that have been made')
+        .example('$0 ch -o html', 'all tags, as an html table [ defaults to json ]')
         .example('$0 ch 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
         .example('$0 ch -v 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
         .example('$0 ch --version 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
@@ -35,7 +38,7 @@ if(!argv._[0]){
         .alias('h', 'help')
         .example('$0 ch -v 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
         .argv
-    ChangelogPrinter(argv._[1]||argv.v)
+    ChangelogPrinter(argv._[1]||argv.v, argv.o)
       .then(function(result){
         console.log(result);
       });
