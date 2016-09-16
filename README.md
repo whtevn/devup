@@ -17,6 +17,17 @@ Options:
 
     -h, --help  Show help                                                [boolean]
 
+Examples:
+
+Bump patch version number
+    $ devup
+
+Bump minor version number
+    $ devup -t minor
+
+Bump major version number
+    $ devup -t major
+
 
 todo: 
   - escape messages so that special characters can be used

@@ -13,6 +13,10 @@ if(!argv._[0]){
   argv = args
     .usage("\nBump all the ".yellow+'.versions'.red+' in all your '.yellow+'.jsons'.cyan)
     .example('$0', 'bump all version numbers in all json files in your current directory, make a commit, a tag, and ask if you want to go public with it')
+    .example('$0', 'bump patch version numbers. ie 0.0.X uses -t patch as default')
+    .example('$0 -t patch', 'bump patch version numbers. ie 0.0.X')
+    .example('$0 -t minor', 'bump minor version numbers. ie 0.X.0')
+    .example('$0 -t major', 'bump major version numbers. ie X.0.0')
     .alias('t', 'type')
     .default('t', 'patch')
     .help('h')
