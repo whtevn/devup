@@ -19,13 +19,16 @@ Options:
 
 Examples:
 
-Bump patch version number
+Bump patch version number (major.minor.patch)
+    
     $ devup
 
-Bump minor version number
+Bump minor version number (major.minor.patch)
+    
     $ devup -t minor
 
-Bump major version number
+Bump major version number (major.minor.patch)
+    
     $ devup -t major
 
 
