@@ -6,8 +6,7 @@
   "scripts": {
     "build": "rm -rf ./build && npm run build:lib && npm run build:bin",
     "build:lib": "rm -rf ./build/lib && mkdir -p ./build/lib && babel lib/ -d ./build/lib/",
-    "build:bin": "rm -rf ./build/bin && mkdir -p ./build/bin && babel bin/devup.js -o ./build/bin/devup && chmod +x ./build/bin/devup",
-    "prepublish": "npm run build && ./build/bin/devup"
+    "build:bin": "rm -rf ./build/bin && mkdir -p ./build/bin && babel bin/devup.js -o ./build/bin/devup && chmod +x ./build/bin/devup"
   },
   "dependencies": {
     "immutable": "^3.8.1",

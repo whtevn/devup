@@ -12,14 +12,24 @@ module.exports = function (filter, output) {
   return (0, _spawn_promise2.default)("git", "tag", "-l", "-n9").then(sort_results).then(function (results) {
     return filter_results(results, filter);
   }).then(function (results) {
-    if (output === "html") {
-      var html = results.map(function (tag) {
-        tag = tag.match(/^([^\s]*)\s+([\s].*)$/);
-        return "<tr><td>" + tag[1] + "</td><td>" + tag[2] + "</td></tr>";
-      });
-      results = ["</table>"].concat(_toConsumableArray(html), ["<table>"]);
+    results = results.reverse();
+    switch (output) {
+      case "html":
+        var html = results.map(function (tag) {
+          tag = tag.match(/^([^\s]*)\s+([\s].*)$/);
+          return "<tr><td>" + tag[1] + "</td><td>" + tag[2] + "</td></tr>";
+        }).reverse();
+        results = ["<table>"].concat(_toConsumableArray(html), ["</table>"]);
+        break;
+      case "json":
+        var json = results.map(function (tag) {
+          tag = tag.match(/^([^\s]*)\s+([\s].*)$/);
+          return "{\"version\": \"" + tag[1] + "\", \"message\": \"" + tag[2] + "\"}";
+        }).join(",\n");
+        results = ["[", json, "]"];
+        break;
     }
-    return results.reverse();
+    return results;
   }).catch(function (e) {
     return console.log(e);
   });
