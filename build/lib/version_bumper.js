@@ -27,12 +27,15 @@ function VersionBumper(bump_type, files) {
     return file.location;
   });
 
-  var current_version = devup.ensure_consistency.apply(devup, [undefined].concat(_toConsumableArray(files)));
-
   var message = void 0;
-  var next_version = devup.calculate_bump(current_version, bump_type);
-
-  devup.ensure_branch("master").then(function () {
+  var next_version = void 0;
+  devup.ensure_consistency.apply(devup, [undefined].concat(_toConsumableArray(files))).then(function (current_version) {
+    return devup.calculate_bump(current_version, bump_type);
+  }).then(function (updated_version) {
+    devup.ensure_branch("master");
+    next_version = updated_version;
+    return next_version;
+  }).then(function (next_version) {
     return get_tag_message(next_version);
   }).then(function (user_response) {
     return message = shellescape([user_response]);
@@ -48,6 +51,7 @@ function VersionBumper(bump_type, files) {
   }).then(function () {
     return devup.commit_to_git.apply(devup, ['bumping version numbers to ' + next_version + ' - ' + message].concat(_toConsumableArray(file_locations)));
   }).then(function () {
+    console.log(next_version);
     return devup.add_tag_to_git(next_version, message);
   }).then(function () {
     return ask_question("would you like to push your changes to origin?", "yes");

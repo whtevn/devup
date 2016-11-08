@@ -23,47 +23,54 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var fs = require('fs');
 var buffer = require('buffer');
 var XML = require('xml2js');
-XML.stringify = new XML.Builder();
+var XML_builder = new XML.Builder();
+var XML_parser = new XML.Parser();
 
 function bump_version() {
   var bump_type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'patch';
   var file = arguments[1];
 
-  var current_version = find_version(file.location, file.extension, file.search);
-  var next_version = calculate_bump(current_version, bump_type);
-  var file_contents = get_object_from_file(file.location, file.extension);
-  var updated_contents = file_contents.setIn(file.search, next_version);
-  write_object_to_file(updated_contents, file.location, file.extension);
-  return next_version;
+  return find_version(file.location, file.extension, file.search).then(function (current_version) {
+    return calculate_bump(current_version, bump_type);
+  }).then(function (next_version) {
+    return get_object_from_file(file.location, file.extension).then(function (file_contents) {
+      return file_contents.setIn(file.search, next_version);
+    }).then(function (updated_contents) {
+      return write_object_to_file(updated_contents, file.location, file.extension);
+    }).then(function (_) {
+      return next_version;
+    });
+  });
 }
 
 function ensure_consistency(version, file) {
+  for (var _len = arguments.length, remaining_files = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    remaining_files[_key - 2] = arguments[_key];
+  }
+
   if (!file) return version;
 
-  var file_version = find_version(file.location, file.extension, file.search);
-  if (version === undefined || file_version === version) {
-    console.log('found ' + file_version + ' in ' + file.location);
-
-    for (var _len = arguments.length, remaining_files = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-      remaining_files[_key - 2] = arguments[_key];
+  return find_version(file.location, file.extension, file.search).then(function (file_version) {
+    if (version === undefined || file_version === version) {
+      console.log('found ' + file_version + ' in ' + file.location);
+      return ensure_consistency.apply(undefined, [file_version].concat(remaining_files));
+    } else {
+      throw new Error("File versions do not match. Found ${version} and ${file_version}. Please correct before proceeding. Failed on ${file.location}");
     }
-
-    return ensure_consistency.apply(undefined, [file_version].concat(remaining_files));
-  } else {
-    throw new Error("File versions do not match. Found ${version} and ${file_version}. Please correct before proceeding. Failed on ${file.location}");
-  }
+  });
 }
 
 function find_version(location, extension, search) {
-  var parsed_contents = get_object_from_file(location, extension);
-  return parsed_contents.getIn(search);
+  return get_object_from_file(location, extension).then(function (parsed_contents) {
+    return parsed_contents.getIn(search);
+  });
 }
 
 function write_object_to_file(file_contents, location, extension) {
   var packed_contents = void 0;
   switch (extension) {
     case "xml":
-      packed_contents = XML.stringify(file_contents);
+      packed_contents = XML_builder.buildObject(file_contents);
       break;
     case "json":
       packed_contents = JSON.stringify(file_contents, null, '  ');
@@ -76,10 +83,15 @@ function write_object_to_file(file_contents, location, extension) {
 
 function get_object_from_file(location, extension) {
   var parsed_contents = void 0;
-  var file_contents = fs.readFileSync(location);
+  var file_contents = fs.readFileSync(location, 'utf8');
   switch (extension) {
     case "xml":
-      parsed_contents = XML.parseString(file_contents);
+      parsed_contents = new Promise(function (resolve, reject) {
+        parser.parseString(file_contents, function (err, result) {
+          if (err) reject(err);
+          resolve(result['config']['data']);
+        });
+      });
       break;
     case "json":
       parsed_contents = JSON.parse(file_contents);
@@ -87,7 +99,9 @@ function get_object_from_file(location, extension) {
     default:
       throw new Error("Unknown extension ${extension}");
   }
-  return (0, _immutable.Map)(parsed_contents);
+  return Promise.resolve(parsed_contents).then(function (contents) {
+    return (0, _immutable.Map)(contents);
+  });
 }
 
 function calculate_bump(version, type) {
@@ -128,7 +142,9 @@ function commit_to_git(message) {
 
 function add_tag_to_git(version, message) {
   if (!message) throw new Error("error message is required when committing to git");
-  return (0, _spawn_promise2.default)('git', 'tag', '-a', version, '-m', message);
+  return Promise.resolve(version).then(function (v) {
+    return (0, _spawn_promise2.default)('git', 'tag', '-a', v, '-m', message);
+  });
 }
 
 function push_to_git() {
