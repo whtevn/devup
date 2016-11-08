@@ -33,11 +33,12 @@ if(!argv._[0]){
     case "changelog":
       argv = args
         .alias("o", "output")
-        .default("o", "json")
+        .default("o", "raw")
         .usage("\nBump all the ".yellow+'.versions'.red+' in all your '.yellow+'.jsons'.cyan)
         .example('$0 changelog', 'view all tags that have been made')
         .example('$0 ch', 'shortcut to view all tags that have been made')
-        .example('$0 ch -o html', 'all tags, as an html table [ defaults to json ]')
+        .example('$0 ch -o html', 'all tags, as an html table [ defaults to raw output ]')
+        .example('$0 ch -o json', 'all tags, as a json array')
         .example('$0 ch 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
         .example('$0 ch -v 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')
         .example('$0 ch --version 4', 'view all tags for either 4.x.x or 0.4.x or 0.0.4, depending on the tags available')

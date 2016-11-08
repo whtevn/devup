@@ -72,5 +72,3 @@ function sort_results(result) {
     return result;
   });
 }
-
-function create_ordered_array(versions) {}
