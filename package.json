@@ -1,26 +1,31 @@
 {
-	"name": "devup",
-	"version": "0.1.6",
-	"description": "git utility to version and tag",
-	"main": "index.js",
-	"scripts": {},
-	"bin": {
-		"devup": "./bin/devup"
-	},
-	"bugs": {
-		"url": "https://github.com/whtevn/devup/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/whtevn/devup.git"
-	},
-	"author": "evan <evan.short@gmail.com>",
-	"license": "MIT",
-	"dependencies": {
-		"exec-as-promised": "^1.1.0",
-		"prompt": "^0.2.14",
-		"q": "^1.4.1",
-		"q-io": "^1.13.1",
-		"yargs": "^3.15.0"
-	}
+  "name": "devup",
+  "version": "0.1.6",
+  "description": "git utility to version and tag",
+  "main": "index.js",
+  "scripts": {},
+  "bin": {
+    "devup": "./bin/devup"
+  },
+  "bugs": {
+    "url": "https://github.com/whtevn/devup/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whtevn/devup.git"
+  },
+  "author": "evan <evan.short@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "minimist": "^1.2.0",
+    "prompt": "^0.2.14",
+    "xml2js": "^0.4.17",
+    "yargs": "^3.15.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-es2016": "^6.16.0"
+  }
 }
