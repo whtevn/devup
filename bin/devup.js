@@ -47,7 +47,7 @@ if(!argv._[0]){
         .argv
     ChangelogPrinter(argv._[1]||argv.v, argv.o)
       .then(function(result){
-        result.reverse().forEach(function(result){
+        result.forEach(function(result){
           process.stdout.write(result+"\n");
         });
       });

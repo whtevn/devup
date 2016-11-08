@@ -1,8 +1,15 @@
 "use strict";
 
-var exec = require('exec-as-promised')();
+var _spawn_promise = require("./spawn_promise");
+
+var _spawn_promise2 = _interopRequireDefault(_spawn_promise);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 module.exports = function (filter, output) {
-  return exec("git tag -l -n9").then(sort_results).then(function (results) {
+  return (0, _spawn_promise2.default)("git", "tag", "-l", "-n9").then(sort_results).then(function (results) {
     return filter_results(results, filter);
   }).then(function (results) {
     if (output === "html") {
@@ -10,9 +17,11 @@ module.exports = function (filter, output) {
         tag = tag.match(/^([^\s]*)\s+([\s].*)$/);
         return "<tr><td>" + tag[1] + "</td><td>" + tag[2] + "</td></tr>";
       });
-      results = "<table>\n" + html.join("\n") + "\n</table>";
+      results = ["</table>"].concat(_toConsumableArray(html), ["<table>"]);
     }
-    return results;
+    return results.reverse();
+  }).catch(function (e) {
+    return console.log(e);
   });
 };
 

@@ -14,12 +14,16 @@ exports.push_to_git = push_to_git;
 
 var _immutable = require('immutable');
 
+var _spawn_promise = require('./spawn_promise');
+
+var _spawn_promise2 = _interopRequireDefault(_spawn_promise);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var fs = require('fs');
 var buffer = require('buffer');
 var XML = require('xml2js');
 XML.stringify = new XML.Builder();
-
-var spawn = require('child_process').spawn;
 
 function bump_version() {
   var bump_type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'patch';
@@ -105,7 +109,7 @@ function calculate_bump(version, type) {
 
 function ensure_branch(branch) {
   var branch_regex = new RegExp('\\* ' + branch);
-  return spawn_promise('sh', '-c', 'git branch | grep \\*').then(function (current_branch) {
+  return (0, _spawn_promise2.default)('sh', '-c', 'git branch | grep \\*').then(function (current_branch) {
     if (!current_branch.match(branch_regex)) throw new Error("must be on the master branch to bump version numbers");
   });
 }
@@ -117,47 +121,16 @@ function commit_to_git(message) {
     files[_key2 - 1] = arguments[_key2];
   }
 
-  var commit = spawn_promise.apply(undefined, ['git', 'commit'].concat(files, ['-m', message]));
+  var commit = _spawn_promise2.default.apply(undefined, ['git', 'commit'].concat(files, ['-m', message]));
 }
 
 function add_tag_to_git(version, message) {
   if (!message) throw new Error("error message is required when committing to git");
-  return spawn_promise('git', 'tag', '-a', version, '-m', message);
+  return (0, _spawn_promise2.default)('git', 'tag', '-a', version, '-m', message);
 }
 
 function push_to_git() {
-  return spawn_promise('git', 'push').then(function () {
-    return spawn_promise('git', 'push', '--tags');
-  });
-}
-
-function spawn_promise(command) {
-  for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-    args[_key3 - 1] = arguments[_key3];
-  }
-
-  var command_stream = spawn(command, args);
-
-  return new Promise(function (resolve, reject) {
-    var data = "";
-    command_stream.stdout.on('data', function (chunk) {
-      data += chunk;
-    });
-
-    command_stream.stderr.on('data', function (data) {
-      console.warn(data.toString('utf8'));
-    });
-
-    command_stream.on('close', function (code) {
-      command_stream.stdin.end();
-      if (code !== 0) {
-        var command_string = args.reduce(function (prev, cur) {
-          return prev + ' ' + cur;
-        }, command);
-        throw new Error(command_string + ' failed with code ' + code);
-      } else {
-        resolve(data);
-      }
-    });
+  return (0, _spawn_promise2.default)('git', 'push').then(function () {
+    return (0, _spawn_promise2.default)('git', 'push', '--tags');
   });
 }
