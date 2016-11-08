@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { Map, List } from 'immutable';
 
+const fs = require('fs');
+
 var args = require('yargs')
   , argv      = args.argv;
 
