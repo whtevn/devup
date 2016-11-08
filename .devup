@@ -1,0 +1,6 @@
+[
+  { "location": "package.json",
+    "extension": "json",
+    "search": ["version"]
+  }
+]

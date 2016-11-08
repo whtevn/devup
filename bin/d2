@@ -1,18 +1,18 @@
 #!/usr/bin/env node
+const minimist = require('minimist');
+const fs = require('fs');
 import { Map, List } from 'immutable';
 import * as devup from '../lib/devup'
 var prompt = require('prompt');
 prompt.message = "";
 prompt.delimiter = "";
 
-const files = List([
-  { location: "package.json",
-    extension: "json",
-    search: ["version"]
-  }
-]);
+const args = minimist(process.argv.slice(2));
 
-const bump_type = "patch";
+const files = List(JSON.parse(fs.readFileSync('./.devup')));
+
+const bump_type = args.t || args.type || "patch";
+
 /*
 const files = List([
   { location: "package.json",
@@ -38,15 +38,20 @@ devup.ensure_branch("master")
   .then(() => next_version = devup.bump_version(bump_type, ...files))
   .then(() => ask_question("would you like to commit these changes locally?", "yes"))
   .then((response) => {
-    if(response){
-      devup.commit_to_git(`bumping version numbers to ${next_version} - ${message}`, ...file_locations)
-    }else{
+    if(!response){
       console.log("version numbers have been updated locally. changes have not been committed");
       process.exit(0);
     }
   })
+  .then(() => devup.commit_to_git(`bumping version numbers to ${next_version} - ${message}`, ...file_locations))
   .then(() => devup.add_tag_to_git(next_version, message))
   .then(() => ask_question("would you like to push your changes to origin?", "yes"))
+  .then((response) => {
+    if(!response){
+      console.log("your local branch has been updated and a tag has been created, but they have not been pushed to origin");
+      process.exit(0);
+    }
+  })
   .then(() => devup.push_to_git(next_version, message))
   .catch((err) => {
     console.log(err)
