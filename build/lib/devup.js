@@ -42,6 +42,8 @@ function ensure_consistency(version, file) {
 
   var file_version = find_version(file.location, file.extension, file.search);
   if (version === undefined || file_version === version) {
+    console.log('found ' + file_version + ' in ' + file.location);
+
     for (var _len = arguments.length, remaining_files = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
       remaining_files[_key - 2] = arguments[_key];
     }

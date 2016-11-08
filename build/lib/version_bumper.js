@@ -20,18 +20,6 @@ var shellescape = require('shell-escape');
 var prompt = require('prompt');
 prompt.message = "";
 prompt.delimiter = "";
-/*
-const files = List([
-  { location: "package.json",
-    extension: "json",
-    search: ["version"]
-  },
-  { location: "config.xml",
-    extension: "xml",
-    search: ["result", "widget", "$", "version"]
-  }
-]);
-*/
 
 function VersionBumper(bump_type, files) {
 
@@ -39,10 +27,10 @@ function VersionBumper(bump_type, files) {
     return file.location;
   });
 
-  devup.ensure_consistency.apply(devup, [undefined].concat(_toConsumableArray(files)));
+  var current_version = devup.ensure_consistency.apply(devup, [undefined].concat(_toConsumableArray(files)));
 
   var message = void 0;
-  var next_version = void 0;
+  var next_version = devup.calculate_bump(current_version, bump_type);
 
   devup.ensure_branch("master").then(function () {
     return get_tag_message(next_version);
@@ -92,9 +80,9 @@ function ask_question(question, default_question) {
   });
 }
 
-function get_tag_message() {
+function get_tag_message(version) {
   return new Promise(function (resolve, reject) {
-    var msg = 'what change is being made?';
+    var msg = 'what change is being made in ' + version + '?';
     prompt.start();
     prompt.get([{ properties: { tag: { message: msg.cyan } } }], function (err, result) {
       if (!err && result && result.tag) {
