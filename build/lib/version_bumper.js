@@ -29,10 +29,11 @@ function VersionBumper(bump_type, files) {
 
   var message = void 0;
   var next_version = void 0;
-  devup.ensure_consistency.apply(devup, [undefined].concat(_toConsumableArray(files))).then(function (current_version) {
+  devup.ensure_branch("master").then(function () {
+    return devup.ensure_consistency.apply(devup, [undefined].concat(_toConsumableArray(files)));
+  }).then(function (current_version) {
     return devup.calculate_bump(current_version, bump_type);
   }).then(function (updated_version) {
-    devup.ensure_branch("master");
     next_version = updated_version;
     return next_version;
   }).then(function (next_version) {

@@ -14,6 +14,8 @@ exports.push_to_git = push_to_git;
 
 var _immutable = require('immutable');
 
+var _immutable2 = _interopRequireDefault(_immutable);
+
 var _spawn_promise = require('./spawn_promise');
 
 var _spawn_promise2 = _interopRequireDefault(_spawn_promise);
@@ -27,6 +29,10 @@ var XML_builder = new XML.Builder();
 var XML_parser = new XML.Parser();
 
 function bump_version() {
+  for (var _len = arguments.length, remaining = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    remaining[_key - 2] = arguments[_key];
+  }
+
   var bump_type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'patch';
   var file = arguments[1];
 
@@ -40,12 +46,18 @@ function bump_version() {
     }).then(function (_) {
       return next_version;
     });
+  }).then(function (next_version) {
+    if (remaining.length > 0) {
+      return bump_version.apply(undefined, [bump_type].concat(remaining));
+    } else {
+      return next_version;
+    }
   });
 }
 
 function ensure_consistency(version, file) {
-  for (var _len = arguments.length, remaining_files = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-    remaining_files[_key - 2] = arguments[_key];
+  for (var _len2 = arguments.length, remaining_files = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+    remaining_files[_key2 - 2] = arguments[_key2];
   }
 
   if (!file) return version;
@@ -55,7 +67,7 @@ function ensure_consistency(version, file) {
       console.log('found ' + file_version + ' in ' + file.location);
       return ensure_consistency.apply(undefined, [file_version].concat(remaining_files));
     } else {
-      throw new Error("File versions do not match. Found ${version} and ${file_version}. Please correct before proceeding. Failed on ${file.location}");
+      throw new Error('File versions do not match. Found ' + version + ' and ' + file_version + '. Please correct before proceeding. Failed on ' + file.location);
     }
   });
 }
@@ -68,12 +80,13 @@ function find_version(location, extension, search) {
 
 function write_object_to_file(file_contents, location, extension) {
   var packed_contents = void 0;
+  var js_contents = file_contents.toJS();
   switch (extension) {
     case "xml":
-      packed_contents = XML_builder.buildObject(file_contents);
+      packed_contents = XML_builder.buildObject(js_contents);
       break;
     case "json":
-      packed_contents = JSON.stringify(file_contents, null, '  ');
+      packed_contents = JSON.stringify(js_contents, null, '  ');
       break;
     default:
       throw new Error('Unknown extension ' + extension);
@@ -97,10 +110,10 @@ function get_object_from_file(location, extension) {
       parsed_contents = JSON.parse(file_contents);
       break;
     default:
-      throw new Error("Unknown extension ${extension}");
+      throw new Error('Unknown extension ' + extension);
   }
   return Promise.resolve(parsed_contents).then(function (contents) {
-    return (0, _immutable.Map)(contents);
+    return _immutable2.default.fromJS(contents);
   });
 }
 
@@ -133,8 +146,8 @@ function ensure_branch(branch) {
 function commit_to_git(message) {
   if (!message) throw new Error("error message is required when committing to git");
 
-  for (var _len2 = arguments.length, files = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-    files[_key2 - 1] = arguments[_key2];
+  for (var _len3 = arguments.length, files = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+    files[_key3 - 1] = arguments[_key3];
   }
 
   var commit = _spawn_promise2.default.apply(undefined, ['git', 'commit'].concat(files, ['-m', message]));
