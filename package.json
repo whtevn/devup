@@ -22,7 +22,7 @@
   },
   "author": "evan <evan.short@gmail.com>",
   "name": "devup",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "main": "index.js",
   "description": "git utility to version and tag",
   "devDependencies": {
