@@ -50,7 +50,7 @@ function VersionBumper(bump_type, files) {
       process.exit(0);
     }
   }).then(function () {
-    return devup.commit_to_git.apply(devup, ['bumping version numbers to ' + next_version + ' - ' + message].concat(_toConsumableArray(file_locations)));
+    return devup.commit_to_git.apply(devup, ['bumping version numbers to ' + Promise.resolve(next_version) + ' - ' + message].concat(_toConsumableArray(file_locations)));
   }).then(function () {
     return devup.add_tag_to_git(next_version, message);
   }).then(function () {
