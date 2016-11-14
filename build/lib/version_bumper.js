@@ -49,8 +49,9 @@ function VersionBumper(bump_type, files) {
       console.log("version numbers have been updated locally. changes have not been committed");
       process.exit(0);
     }
-  }).then(function () {
-    return devup.commit_to_git.apply(devup, ['bumping version numbers to ' + Promise.resolve(next_version) + ' - ' + message].concat(_toConsumableArray(file_locations)));
+    return next_version;
+  }).then(function (v) {
+    devup.commit_to_git.apply(devup, ['bumping version numbers to ' + v + ' - ' + message].concat(_toConsumableArray(file_locations)));
   }).then(function () {
     return devup.add_tag_to_git(next_version, message);
   }).then(function () {
