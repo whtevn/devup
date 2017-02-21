@@ -23,7 +23,7 @@
   "author": "evan <evan.short@gmail.com>",
   "name": "devup",
   "version": "0.2.18",
-  "main": "index.js",
+  "main": "build/lib/devup.js",
   "description": "git utility to version and tag",
   "devDependencies": {
     "babel-cli": "^6.18.0",
