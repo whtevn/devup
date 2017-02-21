@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.bump_version = bump_version;
 exports.ensure_consistency = ensure_consistency;
 exports.find_version = find_version;
+exports.write_object_to_file = write_object_to_file;
+exports.get_object_from_file = get_object_from_file;
 exports.calculate_bump = calculate_bump;
 exports.ensure_branch = ensure_branch;
 exports.commit_to_git = commit_to_git;
