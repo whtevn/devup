@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "immutable": "^3.8.1",
+    "json-stable-stringify": "^1.0.1",
     "minimist": "^1.2.0",
     "prompt": "^0.2.14",
     "shell-escape": "^0.2.0",
