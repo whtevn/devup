@@ -30,6 +30,8 @@ var XML = require('xml2js');
 var XML_builder = new XML.Builder();
 var XML_parser = new XML.Parser();
 
+var stringify = require('json-stable-stringify');
+
 function bump_version() {
   for (var _len = arguments.length, remaining = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
     remaining[_key - 2] = arguments[_key];
@@ -88,7 +90,7 @@ function write_object_to_file(file_contents, location, extension) {
       packed_contents = XML_builder.buildObject(js_contents);
       break;
     case "json":
-      packed_contents = JSON.stringify(js_contents, null, '  ');
+      packed_contents = stringify(js_contents, { space: '  ' });
       break;
     default:
       throw new Error('Unknown extension ' + extension);
